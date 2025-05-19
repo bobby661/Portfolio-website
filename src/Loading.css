@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .loading-container {
+    height: 100vh;
+    width: 100vw;
+    background-color: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .music-staff {
+    position: relative;
+    width: 300px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  /* Staff lines */
+  .staff-line {
+    height: 2px;
+    background-color: #fff;
+    opacity: 0.6;
+    border-radius: 1px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Notes */
+  .note {
+    position: absolute;
+    font-size: 24px;
+    color: #fff;
+    font-family: 'Segoe UI Symbol', sans-serif;
+    animation: floatNote 3s linear infinite;
+    opacity: 0.9;
+    z-index: 2; /* ⬅️ Ensures notes float *above* the staff lines */
+  }  
+  
+  .note-1 {
+    top: 0;
+    left: 0;
+    animation-delay: 0s;
+  }
+  
+  .note-2 {
+    top: 25px;
+    left: 40px;
+    animation-delay: 0.5s;
+  }
+  
+  .note-3 {
+    top: 50px;
+    left: 80px;
+    animation-delay: 1s;
+  }
+  
+  .note-4 {
+    top: 75px;
+    left: 120px;
+    animation-delay: 1.5s;
+  }
+  
+  @keyframes floatNote {
+    0% {
+      transform: translateX(0px) scale(1);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(180px) scale(1.2);
+      opacity: 0;
+    }
+  }
+  
+  /* Loading text */
+  .loading-text {
+    color: #fff;
+    font-size: 1rem;
+    opacity: 0.7;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+  

@@ -1,0 +1,120 @@
+/* src/App.css */
+
+/* — GLOBAL — */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #111;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* — LANDING — */
+.landing {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.warp-background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160%;
+  transform-origin: center;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 0.1s ease-out;
+}
+
+/* Text overlay on the 3D canvas */
+.text-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.text-overlay h1 {
+  position: absolute;
+  margin: 0;
+  font-weight: 200;
+  line-height: 1;
+  white-space: nowrap;
+  mix-blend-mode: difference;
+  color: #fff;
+  font-size: 16vw;
+}
+.text-make { top: 8%;  left: 5%; }
+.text-cool { top: 35%; right: 5%; } /* ← back to 35% */
+.text-sht  { bottom: 6%; left: 8%; }
+
+/* The fixed canvas that scroll-animates */
+.canvas-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  transform-origin: center center;
+  z-index: 2;
+}
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* — ABOUT SECTION — */
+.about {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background: #222;
+}
+.about-left,
+.about-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* CONTROLS — pushed below the turntable */
+.controls {
+  display: flex;
+  gap: 24px;
+  font-size: 24px;
+  opacity: 0.8;
+  color: #ccc;
+  position: relative;
+  z-index: 10;
+  margin-top: 250px; /* adjust spacing under the canvas */
+}
+
+/* ABOUT TEXT */
+.about-right {
+  padding: 0 40px;
+  text-align: center;
+}
+.about-right h2 {
+  margin: 0 0 20px;
+  font-size: 3rem;
+  color: #eee;
+}
+.about-right p {
+  margin: 0;
+  max-width: 400px;
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.4;
+}
