@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import WarpVisual from './assets/warp.svg';
@@ -8,6 +7,9 @@ import VinylPlayer from './VinylPlayer';
 import { gsap } from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBackward, faVolumeUp, faForward } from '@fortawesome/free-solid-svg-icons';
+
 gsap.registerPlugin(TextPlugin, ScrollTrigger);
 
 function App() {
@@ -16,25 +18,23 @@ function App() {
     'translate(-50%, -50%) scale(0.65) skewY(0deg)'
   );
 
-  // landing text refs
   const makeRef = useRef();
   const coolRef = useRef();
   const shtRef = useRef();
 
-  // about text refs
   const aboutTitleRef = useRef();
   const aboutParaRef = useRef();
 
-  // canvas wrapper ref
   const canvasRef = useRef();
+  const trackRef = useRef();
 
-  // 4s loader
+  const recordFiles = ['record.jpeg', 'record1.jpeg', 'record2.jpeg', 'record3.jpeg'];
+
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 4000);
     return () => clearTimeout(t);
   }, []);
 
-  // mouse‐warp effect
   useEffect(() => {
     if (!isLoading) {
       const onMouse = (e) => {
@@ -51,7 +51,6 @@ function App() {
     }
   }, [isLoading]);
 
-  // landing typewriter
   useEffect(() => {
     if (!isLoading) {
       gsap
@@ -62,7 +61,6 @@ function App() {
     }
   }, [isLoading]);
 
-  // about scroll-triggered typewriter
   useEffect(() => {
     if (!isLoading) {
       const tl = gsap
@@ -87,16 +85,17 @@ function App() {
     }
   }, [isLoading]);
 
-  // scroll-scrub the canvas position & scale into the about section
   useEffect(() => {
     if (!isLoading) {
+      // Phase 1: Landing ➝ About
       gsap.fromTo(
         canvasRef.current,
-        { left: '50%', scale: 1 },
+        { top: '50%', left: '50%', scale: 1 },
         {
-          left: '25%',   // center in left half
-          scale: 0.7,    // only shrink to 70%
-          ease: 'power1.out',
+          top: '50%',
+          left: '25%',
+          scale: 0.7,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: '.about',
             start: 'top bottom',
@@ -105,7 +104,67 @@ function App() {
           },
         }
       );
+
+      // Phase 2: About ➝ Projects
+      gsap.to(canvasRef.current, {
+        top: 'calc(100vh + 400px)',
+        left: '50%',
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.projects-section',
+          start: 'top bottom',
+          end: 'top center',
+          scrub: 1,
+        },
+      });
     }
+  }, [isLoading]);
+
+  // === RECORD CAROUSEL SETUP ===
+  useEffect(() => {
+    if (isLoading) return;
+
+    const images = document.querySelectorAll('.record-img');
+    let loadedCount = 0;
+
+    const onImageLoad = () => {
+      loadedCount++;
+      if (loadedCount === images.length) {
+        startCarousel();
+      }
+    };
+
+    images.forEach((img) => {
+      if (img.complete) {
+        onImageLoad();
+      } else {
+        img.addEventListener('load', onImageLoad);
+      }
+    });
+
+    function startCarousel() {
+      const items = gsap.utils.toArray('.record-img');
+      const itemWidth = items[0].offsetWidth + 80;
+      const totalWidth = items.length * itemWidth;
+
+      gsap.set(items, {
+        x: (i) => i * itemWidth,
+      });
+
+      gsap.to(items, {
+        x: `-=${totalWidth / 2}`,
+        modifiers: {
+          x: gsap.utils.unitize(gsap.utils.wrap(0, totalWidth)),
+        },
+        duration: 40,
+        ease: 'none',
+        repeat: -1,
+      });
+    }
+
+    return () => {
+      images.forEach((img) => img.removeEventListener('load', onImageLoad));
+    };
   }, [isLoading]);
 
   if (isLoading) return <Loading />;
@@ -136,14 +195,26 @@ function App() {
       <section className="about">
         <div className="about-left">
           <div className="controls">
-            <span>◀</span>
-            <span>🔈</span>
-            <span>▶</span>
+            <button className="icon-btn"> <FontAwesomeIcon icon={faBackward} /> </button>
+            <button className="icon-btn"> <FontAwesomeIcon icon={faVolumeUp} /> </button>
+            <button className="icon-btn"> <FontAwesomeIcon icon={faForward} /> </button>
           </div>
         </div>
         <div className="about-right">
           <h2 ref={aboutTitleRef} />
           <p ref={aboutParaRef} />
+        </div>
+      </section>
+
+      {/* ===== Projects ===== */}
+      <section className="projects-section">
+        <h2 className="projects-heading">PROJECTS</h2>
+        <div className="marquee-wrapper">
+          <div className="marquee-track" ref={trackRef}>
+            {[...recordFiles, ...recordFiles].map((file, i) => (
+              <img key={i} src={`/${file}`} alt={`Record ${i + 1}`} className="record-img" />
+            ))}
+          </div>
         </div>
       </section>
     </>

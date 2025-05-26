@@ -1,4 +1,3 @@
-// src/VinylPlayer.jsx
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, RoundedBox } from '@react-three/drei';
@@ -82,12 +81,13 @@ function Vinyl() {
 
 export default function VinylPlayer() {
   return (
-    <Canvas camera={{ position: [0, 3.5, 8], fov: 45 }}>
-      {/* ambient fill */}
+    <Canvas
+      camera={{ position: [0, 3.5, 8], fov: 45 }}
+      gl={{ alpha: true, antialias: true }}
+      style={{ background: 'transparent' }}
+    >
       <ambientLight intensity={0.9} />
-      {/* general directional light */}
       <directionalLight position={[0, 5, 5]} intensity={1.2} />
-      {/* extra overhead light for shine */}
       <pointLight position={[0, 5, 0]} intensity={0.8} />
 
       <Vinyl />
